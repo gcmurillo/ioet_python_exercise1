@@ -3,18 +3,28 @@ from datetime import datetime, timedelta
 week_days = ['MO', 'TU', 'WD', 'TH', 'FR']
 weekend_days = ['ST', 'SD']
 
-my_hours = {  # My hour prices
-    "week": [
-        ('00:01', '09:00', 25),
-        ('09:01', '18:00', 15),
-        ('18:01', '00:00', 20),
-    ],
-    "weekend": [
-        ('00:01', '09:00', 30),
-        ('09:01', '18:00', 20),
-        ('18:01', '00:00', 25),
-    ]
-}
+my_hours = {}
+
+def load_data(filename):
+    """ Fill my_hours dict with data
+
+    Parameters:
+    filename (string): string for filename (week or weekend)
+    """
+    try:
+        if filename in ['week', 'weekend']:
+            _file = open('%s.txt' % filename)
+            my_hours[filename] = []
+            for i in _file.readlines():
+                line_data = i.strip('\n').split(',')
+                my_hours[filename].append((line_data[0], line_data[1], int(line_data[2])))
+        else:
+            print("Please be sure that the filenames are correct!")
+    except:
+        print("Be sure if file %s.txt exists!" % filename)
+        
+load_data('week')
+load_data('weekend')
 
 def get_data_from_line(line):
     """ Return a tuple with (name, days_hours list)
